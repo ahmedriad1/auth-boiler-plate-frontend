@@ -1,11 +1,13 @@
 import { Route, Redirect } from 'react-router-dom';
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const AuthRoute = ({ children, ...props }) => {
+  const loggedIn = useSelector(state => state.auth.loggedIn);
+
   return (
     <Route {...props}>
-      {props.loggedIn ? (
+      {loggedIn ? (
         children
       ) : (
         <Redirect
@@ -19,10 +21,4 @@ const AuthRoute = ({ children, ...props }) => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    loggedIn: state.auth.loggedIn,
-  };
-};
-
-export default connect(mapStateToProps)(AuthRoute);
+export default AuthRoute;
