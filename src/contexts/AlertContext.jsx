@@ -33,9 +33,12 @@ const AlertContextProvider = props => {
         leaveFrom='opacity-100 translate-y-0'
         leaveTo='opacity-0 -translate-y-3'
       >
-        <div className='absolute w-full flex justtify-center items-center py-2 px-4'>
+        <div
+          className='fixed w-full flex justtify-center items-center py-2 px-4'
+          style={{ zIndex: 999999999999 }}
+        >
           <div
-            className={`relative ml-auto w-1/3 rounded shadow-md p-3 px-5 bg-white alert alert--${info.type} overflow-hidden z-50`}
+            className={`relative ml-auto w-1/3 rounded shadow-md p-3 px-5 bg-white alert alert--${info.type} overflow-hidden`}
           >
             <div className='flex items-center'>
               <svg

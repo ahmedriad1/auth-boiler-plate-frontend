@@ -3,23 +3,27 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as actionTypes from '../store/actionTypes';
 import { useForm } from 'react-hook-form';
-import { register } from '../api/auth';
+import { register as signup } from '../api/auth';
 import Button from '../components/auth/Button';
 import Input from '../components/auth/Input';
 import { emailPattern, setToken } from '../helpers/auth';
+import { useAlertContext } from '../contexts/AlertContext';
 
 const Register = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit, errors, watch } = useForm();
+  const { showSuccess, showError } = useAlertContext();
   const onSubmit = async data => {
     setLoading(true);
     try {
-      const { user, token } = await register(data);
+      const { user, token } = await signup(data);
       setToken(token);
       setLoading(false);
+      showSuccess('Account created successfully !');
       dispatch({ type: actionTypes.SET_LOGIN, payload: { user } });
     } catch (err) {
+      showError(err.response.data.message);
       setLoading(false);
     }
   };

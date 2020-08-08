@@ -13,7 +13,7 @@ const Input = ({ inputRef, error, ...props }) => (
       {...props}
       ref={inputRef}
     />
-    {error && <span class='text-red-600 text-xs font-medium'>{error}</span>}
+    {error && <span className='text-red-600 text-xs font-medium'>{error}</span>}
   </>
 );
 
