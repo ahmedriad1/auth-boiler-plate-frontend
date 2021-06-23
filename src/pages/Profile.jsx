@@ -1,20 +1,19 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Layout from '../components/Layout';
 import Input from '../components/auth/Input';
 import { useForm } from 'react-hook-form';
 import { emailPattern, setToken } from '../helpers/auth';
 import { update, updatePassword as updatePass } from '../api/auth';
-import { useSelector, useDispatch } from 'react-redux';
 import { useAlertContext } from '../contexts/AlertContext';
-import * as actionTypes from '../store/actionTypes';
+import useAuthStore from '../stores/useAuthStore';
 
 const Profile = () => {
   const [detailsLoading, setDetailsLoading] = useState(false);
   const [passwordLoading, setPasswordLoading] = useState(false);
   const { showError, showSuccess } = useAlertContext();
-  const dispatch = useDispatch();
 
-  const user = useSelector(state => state.auth.user);
+  const user = useAuthStore(state => state.user);
+  const updateUser = useAuthStore(state => state.updateUser);
 
   const { handleSubmit, register, errors } = useForm({
     defaultValues: {
@@ -36,7 +35,7 @@ const Profile = () => {
       const { user } = await update(data);
       showSuccess('Updated successfully !');
       setDetailsLoading(false);
-      dispatch({ type: actionTypes.UPDATE_USER, payload: { user } });
+      updateUser(user);
     } catch (err) {
       setDetailsLoading(false);
       showError(err.response.data.message);

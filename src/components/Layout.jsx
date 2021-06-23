@@ -1,24 +1,19 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import Transition from '../components/Transition';
-import { useDispatch, useSelector } from 'react-redux';
-import * as actionTypes from '../store/actionTypes';
-import { setToken } from '../helpers/auth';
+import { Transition } from '@headlessui/react';
 import { useAlertContext } from '../contexts/AlertContext';
+import useAuthStore from '../stores/useAuthStore';
 
 const Layout = props => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { showSuccess } = useAlertContext();
-  const dispatch = useDispatch();
-  const isLoggedIn = useSelector(state => state.auth.loggedIn);
-  const user = useSelector(state => state.auth.user);
+  const { isLoggedIn, user, logout: setLogout } = useAuthStore();
 
   const logout = e => {
     e.preventDefault();
-    setToken('');
+    setLogout();
     showSuccess('Logged out !');
-    dispatch({ type: actionTypes.SET_LOGOUT });
   };
 
   return (

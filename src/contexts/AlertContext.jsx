@@ -1,10 +1,10 @@
-import React from 'react';
-import Transition from '../components/Transition';
+import { createContext, useContext, useState } from 'react';
+import { Transition } from '@headlessui/react';
 
-const AlertContext = React.createContext();
+const AlertContext = createContext();
 
 const AlertContextProvider = props => {
-  const [info, setInfo] = React.useState({
+  const [info, setInfo] = useState({
     open: false,
   });
 
@@ -75,6 +75,6 @@ const AlertContextProvider = props => {
   );
 };
 
-const useAlertContext = () => React.useContext(AlertContext);
+const useAlertContext = () => useContext(AlertContext);
 
 export { AlertContextProvider, useAlertContext };

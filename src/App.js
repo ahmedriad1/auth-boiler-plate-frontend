@@ -1,21 +1,48 @@
-import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import store from './store/config';
 import Routes from './pages/Routes';
 import { AlertContextProvider } from './contexts/AlertContext';
+import useAuthStore from './stores/useAuthStore';
+import { useEffect } from 'react';
+
+import cookie from 'js-cookie';
+import jwt from 'jsonwebtoken';
+import { getUser } from './api/auth';
+import { useState } from 'react';
+import { setToken } from './helpers/auth';
 
 const App = () => {
+  const login = useAuthStore(state => state.login);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let token = cookie.get('token');
+
+    if (token) {
+      jwt.verify(token, process.env.REACT_APP_JWT_SECRET, (err, decoded) => {
+        if (err) {
+          token = null;
+          cookie.remove('token');
+          return;
+        }
+      });
+    }
+
+    if (token) {
+      setToken(token);
+      getUser().then(({ user }) => {
+        login(user, token);
+        setIsLoading(false);
+      });
+    } else setIsLoading(false);
+  }, []);
+
+  if (isLoading) return null;
+
   return (
-    <BrowserRouter>
-      <Provider store={store}>
-        <div className='app'>
-          <AlertContextProvider>
-            <Routes />
-          </AlertContextProvider>
-        </div>
-      </Provider>
-    </BrowserRouter>
+    <div className='app'>
+      <AlertContextProvider>
+        <Routes />
+      </AlertContextProvider>
+    </div>
   );
 };
 

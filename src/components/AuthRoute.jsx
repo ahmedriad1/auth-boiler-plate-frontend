@@ -1,13 +1,12 @@
 import { Route, Redirect } from 'react-router-dom';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import useAuthStore from '../stores/useAuthStore';
 
 const AuthRoute = ({ children, ...props }) => {
-  const loggedIn = useSelector(state => state.auth.loggedIn);
+  const isLoggedIn = useAuthStore(state => state.isLoggedIn);
 
   return (
     <Route {...props}>
-      {loggedIn ? (
+      {isLoggedIn ? (
         children
       ) : (
         <Redirect

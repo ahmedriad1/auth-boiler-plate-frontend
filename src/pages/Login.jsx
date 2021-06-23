@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import * as actionTypes from '../store/actionTypes';
 import { useForm } from 'react-hook-form';
 import { login } from '../api/auth';
 import Button from '../components/auth/Button';
 import Input from '../components/auth/Input';
-import { emailPattern, setToken } from '../helpers/auth';
+import { emailPattern } from '../helpers/auth';
 import { useAlertContext } from '../contexts/AlertContext';
+import useAuthStore from '../stores/useAuthStore';
 
 const Login = () => {
-  const dispatch = useDispatch();
+  const setLogin = useAuthStore(state => state.login);
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit, errors } = useForm();
   const { showSuccess, showError } = useAlertContext();
@@ -18,10 +17,9 @@ const Login = () => {
     setLoading(true);
     try {
       const { user, token } = await login(data);
-      setToken(token);
       setLoading(false);
       showSuccess('Logged in successfully !');
-      dispatch({ type: actionTypes.SET_LOGIN, payload: { user } });
+      setLogin(user, token);
     } catch (err) {
       showError(err.response.data.message);
       setLoading(false);
