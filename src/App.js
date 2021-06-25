@@ -1,5 +1,4 @@
 import Routes from './pages/Routes';
-import { AlertContextProvider } from './contexts/AlertContext';
 import useAuthStore from './stores/useAuthStore';
 import { useEffect } from 'react';
 
@@ -8,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import { getUser } from './api/auth';
 import { useState } from 'react';
 import { setToken } from './helpers/auth';
+import { Toaster } from 'react-hot-toast';
 
 const App = () => {
   const login = useAuthStore(state => state.login);
@@ -38,10 +38,9 @@ const App = () => {
   if (isLoading) return null;
 
   return (
-    <div className='app'>
-      <AlertContextProvider>
-        <Routes />
-      </AlertContextProvider>
+    <div className='app relative'>
+      <Toaster position='top-right' reverseOrder={false} />
+      <Routes />
     </div>
   );
 };

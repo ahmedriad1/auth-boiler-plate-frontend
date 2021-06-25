@@ -1,17 +1,25 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
 import { register as signup } from '../api/auth';
 import Button from '../components/auth/Button';
-import Input from '../components/auth/Input';
-import { emailPattern } from '../helpers/auth';
-import { useAlertContext } from '../contexts/AlertContext';
 import useAuthStore from '../stores/useAuthStore';
+import toast from '../helpers/toast';
+import Form from '../components/Form';
+import FormInput from '../components/Form/FormInput';
+import * as yup from 'yup';
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit, errors, watch } = useForm();
-  const { showSuccess, showError } = useAlertContext();
+  const schema = yup.object().shape({
+    name: yup.string().required(),
+    email: yup.string().email().required(),
+    password: yup.string().min(8).required(),
+    confirm_password: yup
+      .string()
+      .min(8)
+      .oneOf([yup.ref('password'), null], 'Passwords must match')
+      .required(),
+  });
   const login = useAuthStore(state => state.login);
 
   const onSubmit = async data => {
@@ -19,10 +27,10 @@ const Register = () => {
     try {
       const { user, token } = await signup(data);
       setLoading(false);
-      showSuccess('Account created successfully !');
+      toast('success', 'Account created successfully !');
       login(user, token);
     } catch (err) {
-      showError(err.response.data.message);
+      toast('error', err.response.data.message);
       setLoading(false);
     }
   };
@@ -46,65 +54,23 @@ const Register = () => {
             </Link>
           </p>
         </div>
-        <form className='mt-8' onSubmit={handleSubmit(onSubmit)}>
+        <Form className='mt-8' onSubmit={onSubmit} schema={schema}>
           <div>
             <div>
-              <Input
-                aria-label='Name'
-                name='name'
-                type='text'
-                placeholder='Name'
-                inputRef={register({ required: true })}
-                error={errors.name?.type === 'required' && 'Name is required !'}
-              />
+              <FormInput name='name' type='text' placeholder='Name' />
             </div>
             <div className='mt-3'>
-              <Input
-                aria-label='Email address'
-                name='email'
-                type='email'
-                placeholder='Email address'
-                inputRef={register({ required: true, pattern: emailPattern() })}
-                error={
-                  (errors.email?.type === 'required' && 'Email address is required !') ||
-                  (errors.email?.type === 'pattern' && 'Invalid email address !')
-                }
-              />
+              <FormInput name='email' type='email' placeholder='Email address' />
             </div>
             <div className='mt-3'>
-              <Input
-                aria-label='Password'
-                name='password'
-                type='password'
-                placeholder='Password'
-                inputRef={register({ required: true, minLength: 8 })}
-                error={
-                  (errors.password?.type === 'required' && 'Password is required !') ||
-                  (errors.password?.type === 'minLength' &&
-                    'Password must be at least 8 characters!')
-                }
-              />
+              <FormInput name='password' type='password' placeholder='Password' />
             </div>
 
             <div className='mt-3'>
-              <Input
-                aria-label='Confirm Password'
+              <FormInput
                 name='confirm_password'
                 type='password'
                 placeholder='Confirm Password'
-                inputRef={register({
-                  required: true,
-                  validate: value => {
-                    return (
-                      value === watch('password') || 'Confirm password does not match !'
-                    );
-                  },
-                })}
-                error={
-                  (errors.confirm_password?.type === 'required' &&
-                    'Confirm password is required !') ||
-                  (errors.confirm_password && errors.confirm_password.message)
-                }
               />
             </div>
           </div>
@@ -112,7 +78,7 @@ const Register = () => {
           <div className='mt-6'>
             <Button loading={loading}>Register</Button>
           </div>
-        </form>
+        </Form>
       </div>
     </div>
   );
