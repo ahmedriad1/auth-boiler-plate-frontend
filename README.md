@@ -5,11 +5,12 @@ This is the frontend for [Auth Boiler Plate Backend](https://github.com/ahmed-ri
 ## Technologies used:
 
 - [React Hook Form](https://github.com/react-hook-form/react-hook-form)
+- [Yup Schema Validation](https://github.com/jquense/yup)
 - [React Router DOM](https://github.com/ReactTraining/react-router/tree/master/packages/react-router-dom)
 - [Axios](https://github.com/axios/axios)
 - [JS Cookie](https://github.com/js-cookie/js-cookie)
 - [Zustand](https://github.com/pmndrs/zustand)
-- [Context API](https://reactjs.org/docs/context.html)
+- [React Hot Toast](https://react-hot-toast.com)
 - [Tailwind V2](https://tailwindcss.com/)
 - [Headless UI](https://headlessui.dev)
 
