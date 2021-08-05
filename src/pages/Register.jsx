@@ -30,7 +30,7 @@ const Register = () => {
       toast('success', 'Account created successfully !');
       login(user, token);
     } catch (err) {
-      toast('error', err.response.data.message);
+      toast('error', err?.response?.data?.message);
       setLoading(false);
     }
   };

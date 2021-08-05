@@ -38,7 +38,7 @@ const Profile = () => {
       updateUser(user);
     } catch (err) {
       setDetailsLoading(false);
-      toast('error', err.response.data.message);
+      toast('error', err?.response?.data?.message);
     }
   };
 
@@ -51,7 +51,7 @@ const Profile = () => {
       setToken(token);
     } catch (err) {
       setPasswordLoading(false);
-      toast('error', err.response.data.message);
+      toast('error', err?.response?.data?.message);
     }
   };
 

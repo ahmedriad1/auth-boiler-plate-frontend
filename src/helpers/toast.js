@@ -22,9 +22,9 @@ const toast = (type, message) => {
             <div className='flex-1 w-0 p-3 px-5'>
               <div className='flex items-center text-base'>
                 <svg
-                  className={`w-6 h-6 mr-4 stroke-current text-${
-                    type === 'success' ? 'green' : 'red'
-                  }-500`}
+                  className={`w-6 h-6 mr-4 stroke-current ${
+                    type === 'success' ? 'text-green-500' : 'text-red-500'
+                  }`}
                   fill='none'
                   strokeLinecap='round'
                   strokeLinejoin='round'
@@ -39,7 +39,7 @@ const toast = (type, message) => {
                   )}
                 </svg>
 
-                {message}
+                {message || (type === 'error' ? 'An error has occurred !' : 'Success')}
               </div>
             </div>
             <div className='flex border-l border-gray-200'>

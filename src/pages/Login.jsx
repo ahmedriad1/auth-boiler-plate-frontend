@@ -11,7 +11,6 @@ import toast from '../helpers/toast';
 const Login = () => {
   const setLogin = useAuthStore(state => state.login);
   const [loading, setLoading] = useState(false);
-  // const { register, handleSubmit, errors } = useForm();
   const schema = yup.object().shape({
     email: yup.string().email().required(),
     password: yup.string().required(),
@@ -25,7 +24,7 @@ const Login = () => {
       toast('success', 'Logged in successfully !');
       setLogin(user, token);
     } catch (err) {
-      toast('error', err.response.data.message);
+      toast('error', err?.response?.data?.message);
       setLoading(false);
     }
   };
